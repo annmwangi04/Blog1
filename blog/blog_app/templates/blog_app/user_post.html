@@ -1,0 +1,33 @@
+{% extends "blog_app/base.html" %}
+{% load static %}
+
+{% block content %}
+  {% if author %}
+    {% if request.user == author %}
+      <h2>My Posts</h2>
+    {% else %}
+      <h2>{{ author.username }}'s Posts</h2>
+    {% endif %}
+  {% endif %}
+
+  {% for post in posts %}
+  <article class="media content-section">
+      {% if post.author.profile and post.author.profile.profile_pic %}
+        <img class="rounded-circle article-img" src="{{ post.author.profile.profile_pic.url }}" alt="{{ post.author.username }}">
+      {% else %}
+        <img class="rounded-circle article-img" src="{% static 'images/default_profile.jpg' %}" alt="Default Profile">
+      {% endif %}
+      
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="{% url 'user-post' post.author.id %}">{{ post.author.username }}</a>
+          <small class="text-muted">{{ post.date_created|date:"F d, Y" }}</small>
+        </div>
+        <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+        <p>{{ post.excerpt|default:post.content|truncatewords:20 }}</p>
+      </div>
+  </article>
+  {% empty %}
+    <p>No posts found.</p>
+  {% endfor %}
+{% endblock %}
