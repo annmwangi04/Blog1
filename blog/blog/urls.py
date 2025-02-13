@@ -10,6 +10,6 @@ urlpatterns = [
     path("", include("blog_app.urls")),
     path("register/", users_views.register, name="users-register"),
     path("login/", auth_views.LoginView.as_view(template_name="users/login.html"), name="users-login"),
-    path("logout/", auth_views.LogoutView.as_view(next_page='home'), name="users-logout"),  # Use built-in LogoutView
+    path("logout/", users_views.logout_user, name="users-logout"),  # Use built-in LogoutView
     path("profile/", users_views.user_profile, name="users-profile"),  
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
